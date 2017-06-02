@@ -90,6 +90,33 @@ public extension UIBarButtonItem {
     }
 }
 
+public extension UIImage {
+    /**
+     To set an icon, use i.e. `barName.GMDIcon = GMDType.GMDPublic`
+     */
+    public static func gmdIcon(name: GMDType, textColor: UIColor, size: CGSize, backgroundColor: UIColor = UIColor.clear) -> UIImage {
+        
+        // Taken from FontAwesome.io's Fixed Width Icon CSS
+        let fontAspectRatio: CGFloat = 1.28571429
+        
+        let fontSize = min(size.width / fontAspectRatio, size.height)
+        
+        FontLoader.loadFontIfNeeded()
+        let font = UIFont(name: GMDStruct.FontName, size: fontSize)
+        
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = NSTextAlignment.center
+        
+        let attributedString = NSAttributedString(string: name.text!, attributes: [NSFontAttributeName: font, NSForegroundColorAttributeName: textColor, NSBackgroundColorAttributeName: backgroundColor, NSParagraphStyleAttributeName: paragraph])
+        UIGraphicsBeginImageContextWithOptions(size, false , 0.0)
+        attributedString.draw(in: CGRect(x: 0, y: (size.height - fontSize) / 2, width: size.width, height: fontSize))
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image!
+    }
+}
+
 private struct GMDStruct {
     
     static let FileFontName = "GMDIcons"
